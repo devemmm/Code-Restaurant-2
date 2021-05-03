@@ -3,10 +3,11 @@ package org.apache.jsp;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
-import src.dao.GeneralDao;
-import src.domain.Account;
-import src.service.RestaurantServiceImpl;
-import src.service.RestaurantService;
+import com.src.helps.AccountError;
+import com.src.dao.GeneralDao;
+import com.src.domain.Account;
+import com.src.service.RestaurantServiceImpl;
+import com.src.service.RestaurantService;
 
 public final class signupProcess_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -52,8 +53,17 @@ public final class signupProcess_jsp extends org.apache.jasper.runtime.HttpJspBa
       out.write("\n");
       out.write("\n");
       out.write("\n");
+      out.write("\n");
       out.write("<!DOCTYPE html>\n");
 
+    
+    AccountError accountError = new AccountError();
+    AccountError errorData = (AccountError) session.getAttribute("errorData");
+    if(errorData == null){
+        errorData = new AccountError();
+        session.setAttribute("errorData", errorData);
+    }
+    
     try{
        
         String email = request.getParameter("email");
@@ -64,6 +74,17 @@ public final class signupProcess_jsp extends org.apache.jasper.runtime.HttpJspBa
         String password2 = request.getParameter("password2");
 
         if(!password.toString().equals(password2)){
+            errorData.setGeneralError("Password dos not mutch");
+            
+      out.write("\n");
+      out.write("                ");
+      if (true) {
+        _jspx_page_context.forward("signup.jsp");
+        return;
+      }
+      out.write("\n");
+      out.write("            ");
+
             return;
         }
         
@@ -73,17 +94,45 @@ public final class signupProcess_jsp extends org.apache.jasper.runtime.HttpJspBa
         Account retAccount = restaurantService.signup(account);
         
         if(retAccount == null){
+            errorData.setGeneralError("Email not found !");
+            
+      out.write("\n");
+      out.write("                ");
+      if (true) {
+        _jspx_page_context.forward("signup.jsp");
+        return;
+      }
+      out.write("\n");
+      out.write("            ");
+
             return;
         }
+        
+        
+      out.write("\n");
+      out.write("            ");
+      if (true) {
+        _jspx_page_context.forward("signin.jsp");
+        return;
+      }
+      out.write("\n");
+      out.write("        ");
+
     }catch(Exception e){
+        errorData.setGeneralError(e.getMessage());
+        
+      out.write("\n");
+      out.write("            ");
+      if (true) {
+        _jspx_page_context.forward("signup.jsp");
+        return;
+      }
+      out.write("\n");
+      out.write("        ");
+
         return;
     }
 
-      out.write('\n');
-      if (true) {
-        _jspx_page_context.forward("signin.html");
-        return;
-      }
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;
